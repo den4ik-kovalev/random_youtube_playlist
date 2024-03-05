@@ -39,23 +39,28 @@ async def cmd_menu(message: types.Message):
 async def cmd_config(message: types.Message):
     """ Обработчик команды /config """
     storage = Storage(message.chat.id)
-    file = FSInputFile(storage.config_file.path)
-    await bot.send_document(
-        chat_id=message.chat.id,
-        document=file
-    )
-    if not storage.config_file.read():
+    if storage.config_file.read():
+        file = FSInputFile(storage.config_file.path)
+        await bot.send_document(
+            chat_id=message.chat.id,
+            document=file
+        )
+    else:
         await bot.send_document(
             chat_id=message.chat.id,
             document=FSInputFile("config_example.yml"),
-            caption="Пример файла с настройками"
+            caption="Настройки не установлены\nПример файла с настройками"
         )
 
 
 @dispatcher.message(Command("describe"))
 async def cmd_describe(message: types.Message):
     """ Обработчик команды /describe """
+
     storage = Storage(message.chat.id)
+    if not storage.mode_2_playlists:
+        await message.answer("Нет доступных режимов")
+
     builder = InlineKeyboardBuilder()
     for mode in storage.mode_2_playlists:
         builder.add(
@@ -65,13 +70,18 @@ async def cmd_describe(message: types.Message):
             )
         )
     builder.adjust(4)  # 4 кнопки в ряд
+
     await message.answer("Выберите режим", reply_markup=builder.as_markup())
 
 
 @dispatcher.message(Command("make"))
 async def cmd_make(message: types.Message):
     """ Обработчик команды /make """
+
     storage = Storage(message.chat.id)
+    if not storage.mode_2_playlists:
+        await message.answer("Нет доступных режимов")
+
     builder = InlineKeyboardBuilder()
     for mode in storage.mode_2_playlists:
         builder.add(
@@ -81,6 +91,7 @@ async def cmd_make(message: types.Message):
             )
         )
     builder.adjust(4)  # 4 кнопки в ряд
+
     await message.answer("Выберите режим", reply_markup=builder.as_markup())
 
 
