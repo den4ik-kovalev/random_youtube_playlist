@@ -1,0 +1,11 @@
+urls:
+  SABATON Official Videos: https://www.youtube.com/playlist?list=PLA_zjX3swAf5tsw9KdHOGodzcJ_PptL9a
+  ALAN AZTEC HARDBASS 2022: https://www.youtube.com/playlist?list=PLddo1RROpLwg3NDWPXAXeZwKxeR3dcbZD
+modes:
+  Metal:
+    - SABATON Official Videos
+  Hardbass:
+    - ALAN AZTEC HARDBASS 2022
+  All:
+    - SABATON Official Videos
+    - ALAN AZTEC HARDBASS 2022
