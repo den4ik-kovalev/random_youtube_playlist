@@ -60,6 +60,7 @@ async def cmd_describe(message: types.Message):
     storage = Storage(message.chat.id)
     if not storage.mode_2_playlists:
         await message.answer("Нет доступных режимов")
+        return
 
     builder = InlineKeyboardBuilder()
     for mode in storage.mode_2_playlists:
@@ -81,6 +82,7 @@ async def cmd_make(message: types.Message):
     storage = Storage(message.chat.id)
     if not storage.mode_2_playlists:
         await message.answer("Нет доступных режимов")
+        return
 
     builder = InlineKeyboardBuilder()
     for mode in storage.mode_2_playlists:
