@@ -113,7 +113,7 @@ async def callbacks_describe(callback: types.CallbackQuery):
     _, mode = callback.data.split("_")
 
     # Названия плейлистов данного режима
-    storage = Storage(callback.chat.id)
+    storage = Storage(callback.message.chat.id)
     playlists = storage.mode_2_playlists[mode]
     lines = [
         f"<b>{mode}</b>",
@@ -132,7 +132,7 @@ async def callbacks_make(callback: types.CallbackQuery):
     _, mode = callback.data.split("_")
 
     # Список ссылок на плейлисты данного режима
-    storage = Storage(callback.chat.id)
+    storage = Storage(callback.message.chat.id)
     urls = storage.mode_2_urls[mode]
 
     # Список видео из этих плейлистов
