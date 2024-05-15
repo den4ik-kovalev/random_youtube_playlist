@@ -39,7 +39,7 @@
 
 ## pythonanywhere.com
 Чтобы задеплоить бота на pythonanywhere.com, необходимо проделать дополнительные шаги (Причина: https://www.pythonanywhere.com/forums/topic/28845/)
-7. Переименовать pythonanywhere.py -> main.py
+7. Раскомментить в main.py все строки для pythonanywhere
 8. `pip install aiohttp-socks`
 9. `cd ~/random_youtube_playlist; venv/bin/python3 main.py`
 

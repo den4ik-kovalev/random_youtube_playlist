@@ -16,6 +16,10 @@ class Storage:
         self._config_file = YAMLFile(self._chat_dir_path / "config.yml")
         self._cache_file = YAMLFile(self._chat_dir_path / "cache.yml")
 
+    @classmethod
+    def chats(cls) -> list[int]:
+        return [int(p.name) for p in cls.root_dir_path.glob("*") if p.is_dir()]
+
     @property
     def config_file(self) -> YAMLFile:
         return self._config_file
@@ -48,3 +52,8 @@ class Storage:
     def playlist_url_2_videos_ids(self) -> dict[str, list[str]]:
         """ {ССЫЛКА: [ВИДЕО_ID_1, ВИДЕО_ID_2]} """
         return self.cache_file.read() or {}
+
+    @property
+    def auto_modes(self) -> list[str]:
+        """ [РЕЖИМ, РЕЖИМ] """
+        return (self.config_file.read() or {}).get("auto", [])

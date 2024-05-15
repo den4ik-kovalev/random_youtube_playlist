@@ -2,6 +2,7 @@ import asyncio
 import random
 
 from aiogram import Bot, Dispatcher, types, F
+# from aiogram.client.session.aiohttp import AiohttpSession  # for pythonanywhere
 from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
@@ -15,7 +16,13 @@ from youtube import YouTube
 
 logger.add("error.log", format="{time} {level} {message}", level="ERROR")
 token = dotenv_values(".env")["TOKEN"]
-bot = Bot(token=token)
+
+bot = Bot(token=token)  # for normal use
+
+# proxy = "http://proxy.server:3128"  # for pythonanywhere
+# session = AiohttpSession(proxy=proxy)  # for pythonanywhere
+# bot = Bot(token=token, session=session)  # for pythonanywhere
+
 dispatcher = Dispatcher()
 
 
@@ -238,9 +245,41 @@ async def callbacks_fast(callback: types.CallbackQuery):
     # await callback.answer()
 
 
+async def on_startup():
+
+    for chat_id in Storage.chats():
+
+        # Список ссылок на плейлисты данного режима
+        storage = Storage(chat_id)
+
+        # То же, что и /fast
+        for mode in storage.auto_modes:
+
+            urls = storage.mode_2_urls[mode]
+
+            # Список id видео из этих плейлистов
+            videos_ids = []
+            yt = YouTube(storage, is_available=False)
+            for url in urls:
+                videos_ids.extend(yt.get_playlist_videos_ids(url))
+
+            if not videos_ids:
+                return
+
+            # Выбрать до 50 случайных видео
+            size = min([50, len(videos_ids)])
+            sample = random.sample(videos_ids, size)
+
+            # Сгенерировать ссылку на плейлист из этих видео
+            playlist_link = "http://www.youtube.com/watch_videos?video_ids=" + ",".join(sample)
+
+            await bot.send_message(chat_id, f"<b>{mode}</b>\n\n{playlist_link}", parse_mode=ParseMode.HTML)
+
+
 @logger.catch
 async def main():
     """ Ох пойдет щас возня """
+    await on_startup()
     await dispatcher.start_polling(bot)
 
 
